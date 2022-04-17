@@ -1,0 +1,28 @@
+FROM node:alpine
+
+WORKDIR /usr/src/app
+
+COPY package.json ./ 
+COPY package-lock.json ./ 
+
+RUN npm install
+
+COPY ./ ./ 
+
+CMD ["npm", "run", "start"]
+
+# Dockerfile.dev build시 => docker build -f Dockerfile.dev -t ksong1052/react-app ./
+# Dockerfile.dev실행시 => docker run -p 3000:3000 ksong1052/react-app
+# 위의 command가 실행이 안되면 => docker run -it -p 3000:3000 ksong1052/react-app
+# i : 상호 입출력   /  t : tty를 활성화하여 bash쉘을 사용
+
+# 🌟 Docker Volume 이용하기 
+# COPY : 로컬 resource를 Docker container로 복사
+# VOLUME : Docker container에서 로컬 resource Mapping(참조) 해 주는 것이다. 
+#          소스 수정시마다 buiid를 해 줄 필요가 없다.
+#         docker run -it -p 3000:3000 -v /usr/src/app/node_modules -v ${pwd}:/usr/src/app 이미지 아이디
+#                                     [-- 이 부분은 참조하기 말라]  [-- 현재 디렉토리를 참조]
+
+# 🌟 Docker Compose 이용하기
+# => docker-compose.yml 파일 이용
+# Command : "docker-compose up"   or  "docker-compose up --build"
